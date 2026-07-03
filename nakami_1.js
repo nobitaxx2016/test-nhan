@@ -16,3 +16,4 @@ if (blocked.some(r => r.test(url))) {
 }
 
 $done({});
+

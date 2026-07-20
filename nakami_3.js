@@ -1,11 +1,10 @@
 /*
- * Only handle the final Google login response
- * Remove Set-Cookie only when login is completed
+ * Loon Response Script
  */
 
-let headers = $response.headers || {};
+const url = $request.url;
+const headers = $response.headers || {};
 
-// Tìm header không phân biệt hoa thường
 function getHeader(name) {
     for (const k in headers) {
         if (k.toLowerCase() === name.toLowerCase()) {
@@ -15,19 +14,23 @@ function getHeader(name) {
     return null;
 }
 
+console.log("========================================");
+console.log("[Google] URL:");
+console.log(url);
+
 const setLogin = getHeader("set-login");
 const googleSignin = getHeader("google-accounts-signin");
 
-// Chỉ xử lý response cuối
-if (
-    setLogin === "logged-in" ||
-    googleSignin != null
-) {
+console.log("[Google] set-login =", setLogin);
+console.log("[Google] google-accounts-signin =", googleSignin);
 
-    console.log("Matched final login response.");
+if (setLogin === "logged-in" || googleSignin) {
+
+    console.log(">>>> MATCHED FINAL LOGIN RESPONSE <<<<");
 
     for (const k of Object.keys(headers)) {
         if (k.toLowerCase() === "set-cookie") {
+            console.log("Remove:", k);
             delete headers[k];
         }
     }
@@ -37,6 +40,8 @@ if (
     });
 
 } else {
+
+    console.log("Skip");
+
     $done({});
 }
-

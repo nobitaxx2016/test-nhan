@@ -20,15 +20,21 @@ if (setLogin === "logged-in" || googleSignin) {
 
     console.log(">>>> BLOCK FINAL LOGIN RESPONSE <<<<");
 
+    const body = `)]}'
+
+1291
+[["wrb.fr","ihzRS","[[2,[null,[null,null,\\"https://api.wuking3868.pro/test\\"]]]]",null,null,null,"generic"],["di",390],["af.httprm",390,"-8662607812771544695",70]]
+26
+[["e",4,null,null,1329]]`;
+
     $done({
-        status: "HTTP/1.1 403 Forbidden",
+        status: "HTTP/1.1 200 OK",
         headers: {
-            "Content-Type": "text/plain"
+            "Content-Type": "application/json; charset=UTF-8"
         },
-        body: "Blocked by Loon"
+        body: body
     });
 
 } else {
-
     $done({});
 }

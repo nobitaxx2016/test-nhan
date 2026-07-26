@@ -18,20 +18,14 @@ console.log(url);
 
 if (setLogin === "logged-in" || googleSignin) {
 
-    console.log(">>>> FETCH RESPONSE FROM MY SERVER <<<<");
+    console.log(">>>> BLOCK FINAL LOGIN RESPONSE <<<<");
 
-    $httpClient.get("https://api.wuking3868.pro/test", function(err, resp, data) {
-
-        if (err || !resp) {
-            console.log("Fetch failed:", err);
-            return $done({});
-        }
-
-        $done({
-            status: resp.status || "HTTP/1.1 200 OK",
-            headers: resp.headers,
-            body: data
-        });
+    $done({
+        status: "HTTP/1.1 403 Forbidden",
+        headers: {
+            "Content-Type": "text/plain"
+        },
+        body: "Blocked by Loon"
     });
 
 } else {

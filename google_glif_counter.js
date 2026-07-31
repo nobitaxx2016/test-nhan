@@ -37,3 +37,6 @@ if (count > 1) {
 
     $done({});
 }
+
+console.log("===== SCRIPT END =====");
+

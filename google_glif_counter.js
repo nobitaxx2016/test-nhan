@@ -46,7 +46,7 @@ if (url === "https://loon.local/counter/off") {
 // =========================
 // Chỉ xử lý request Google
 // =========================
-if (!url.includes("//data/batchexecute")) {
+if (!url.includes("/data/batchexecute")) {
     $done({});
     return;
 }

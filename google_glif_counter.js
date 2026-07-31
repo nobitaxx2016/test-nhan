@@ -1,5 +1,6 @@
 const url = $request.url;
 
+console.log("===== SCRIPT START =====");
 // Chỉ xử lý endpoint này
 if (!url.includes("/lifecycle/_/AccountLifecyclePlatformSignupUi/data/batchexecute")) {
     $done({});

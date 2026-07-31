@@ -43,11 +43,8 @@ if (url === "https://loon.local/counter/off") {
     return;
 }
 
-// =========================
-// Chỉ xử lý request Google
-// =========================
-console.log("URL = " + url);
-if (!url.includes("/lifecycle/_/AccountLifecyclePlatformSignupUi/data/batchexecute")) {
+// Nếu Counter đang OFF thì luôn PASS
+if ($persistentStore.read("glif_enable") !== "1") {
     $done({});
     return;
 }

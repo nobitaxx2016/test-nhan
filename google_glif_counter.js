@@ -46,6 +46,7 @@ if (url === "https://loon.local/counter/off") {
 // =========================
 // Chỉ xử lý request Google
 // =========================
+console.log("URL = " + url);
 if (!url.includes("/lifecycle/_/AccountLifecyclePlatformSignupUi/data/batchexecute")) {
     $done({});
     return;

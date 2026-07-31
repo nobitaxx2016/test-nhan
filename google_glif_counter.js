@@ -1,29 +1,24 @@
 const url = $request.url;
 
-// Chỉ xử lý đúng endpoint này
+// Chỉ xử lý endpoint này
 if (!url.includes("/lifecycle/_/AccountLifecyclePlatformSignupUi/data/batchexecute")) {
     $done({});
     return;
 }
 
-// Đọc bộ đếm
 let count = parseInt($persistentStore.read("glif_counter") || "0");
-
-// Tăng
 count++;
 
-// Lưu
 $persistentStore.write(String(count), "glif_counter");
 
-console.log("================================");
-console.log("GLIF Request #" + count);
-console.log(url);
+console.log("========================================");
+console.log("[GLIF] Counter : " + count);
+console.log("[GLIF] URL     : " + url);
 
-// ====== Chỉ cho request đầu tiên ======
-
+// Chặn từ request thứ 2 trở đi
 if (count > 1) {
 
-    console.log("BLOCK");
+    console.log("[GLIF] ACTION  : BLOCK");
 
     $done({
         response: {
@@ -37,7 +32,7 @@ if (count > 1) {
 
 } else {
 
-    console.log("PASS");
+    console.log("[GLIF] ACTION  : PASS");
 
     $done({});
 }

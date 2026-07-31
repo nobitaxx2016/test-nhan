@@ -4,6 +4,7 @@ console.log("===== SCRIPT START =====");
 
 
 // Reset counter
+// ^https://reset\.local/reset-counter request-script Google_GLIF_Counter.js
 if (url.includes("/reset-counter")) {
     $persistentStore.write("0", "glif_counter");
     console.log("Counter reset");

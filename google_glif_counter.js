@@ -1,58 +1,63 @@
 const url = $request.url;
 
-console.log("===== SCRIPT START =====");
+// ===== Bật Counter =====
+if (url === "https://loon.local/counter/on") {
 
-
-// Reset counter
-// ^https://reset\.local/reset-counter request-script Google_GLIF_Counter.js
-if (url.includes("/reset-counter")) {
+    $persistentStore.write("1", "glif_enable");
     $persistentStore.write("0", "glif_counter");
-    console.log("Counter reset");
+
     $done({
         response: {
             status: 200,
-            body: "OK"
+            body: "Counter ON"
         }
     });
     return;
 }
 
-// Chỉ xử lý endpoint này
+// ===== Tắt Counter =====
+if (url === "https://loon.local/counter/off") {
+
+    $persistentStore.write("0", "glif_enable");
+
+    $done({
+        response: {
+            status: 200,
+            body: "Counter OFF"
+        }
+    });
+    return;
+}
+
+// ===== Chỉ xử lý Google =====
 if (!url.includes("/lifecycle/_/AccountLifecyclePlatformSignupUi/data/batchexecute")) {
     $done({});
     return;
 }
 
+// Nếu đang OFF thì luôn PASS
+if ($persistentStore.read("glif_enable") !== "1") {
+    $done({});
+    return;
+}
+
+// Đang ON -> bắt đầu đếm
 let count = parseInt($persistentStore.read("glif_counter") || "0");
 count++;
 
 $persistentStore.write(String(count), "glif_counter");
 
-console.log("========================================");
-console.log("[GLIF] Counter : " + count);
-console.log("[GLIF] URL     : " + url);
+console.log("Counter =", count);
 
-// Chặn từ request thứ 2 trở đi
+// Ví dụ chỉ cho request đầu tiên
 if (count > 1) {
-
-    console.log("[GLIF] ACTION  : BLOCK");
-
     $done({
         response: {
             status: 404,
-            headers: {
-                "Content-Type": "text/plain"
-            },
             body: ""
         }
     });
-
-} else {
-
-    console.log("[GLIF] ACTION  : PASS");
-
-    $done({});
+    return;
 }
 
-console.log("===== SCRIPT END =====");
-
+$done({});

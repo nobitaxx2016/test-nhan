@@ -1,6 +1,21 @@
 const url = $request.url;
 
 console.log("===== SCRIPT START =====");
+
+
+// Reset counter
+if (url.includes("/reset-counter")) {
+    $persistentStore.write("0", "glif_counter");
+    console.log("Counter reset");
+    $done({
+        response: {
+            status: 200,
+            body: "OK"
+        }
+    });
+    return;
+}
+
 // Chỉ xử lý endpoint này
 if (!url.includes("/lifecycle/_/AccountLifecyclePlatformSignupUi/data/batchexecute")) {
     $done({});

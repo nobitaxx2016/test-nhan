@@ -84,7 +84,7 @@ console.log("[GLIF] Counter = " + count);
 // =========================
 // Chặn sau request đầu tiên
 // =========================
-if (count > 1) {
+if (count > 2) {
 
     console.log("[GLIF] BLOCK");
 

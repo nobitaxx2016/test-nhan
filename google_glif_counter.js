@@ -2,6 +2,7 @@ const url = $request.url;
 
 // ^https?:\/\/loon\.local\/counter\/(on|off)(?:\?.*)?$
 
+
 // ===== Bật Counter =====
 if (url === "https://loon.local/counter/on") {
 

@@ -1,30 +1,64 @@
+// /*
+//  * Google Response Patch
+//  * EMBEDDED -> SAFARI_AUTHENTICATION_SESSION
+//  */
+
+// let body = $response.body;
+
+// console.log("========== Google Advice Patch ==========");
+// console.log($request.url);
+
+// if (body.includes('"advice_code": "EMBEDDED"')) {
+
+//     console.log("Matched advice_code = EMBEDDED");
+
+//     body = body.replace(
+//         /"advice_code"\s*:\s*"EMBEDDED"/g,
+//         '"advice_code": "SAFARI_AUTHENTICATION_SESSION"'
+//     );
+
+//     console.log("Patched -> SAFARI_AUTHENTICATION_SESSION");
+
+// } else {
+
+//     console.log("No advice_code found.");
+
+// }
+
+// $done({
+//     body: body
+// });
+
+
+
+
 /*
- * Google Response Patch
- * EMBEDDED -> SAFARI_AUTHENTICATION_SESSION
+ * Google Response Merge
+ * Giữ nguyên response gốc
+ * Chỉ thay field "uri" bằng uri của response mới
  */
 
-let body = $response.body;
+const OLD_RESPONSE = {
+    // Dán toàn bộ response cũ vào đây
+};
 
-console.log("========== Google Advice Patch ==========");
-console.log($request.url);
+try {
 
-if (body.includes('"advice_code": "EMBEDDED"')) {
+    const newResp = JSON.parse($response.body);
 
-    console.log("Matched advice_code = EMBEDDED");
+    if (newResp.uri) {
+        console.log("Replace URI");
+        OLD_RESPONSE.uri = newResp.uri;
+    }
 
-    body = body.replace(
-        /"advice_code"\s*:\s*"EMBEDDED"/g,
-        '"advice_code": "SAFARI_AUTHENTICATION_SESSION"'
-    );
+    $done({
+        body: JSON.stringify(OLD_RESPONSE)
+    });
 
-    console.log("Patched -> SAFARI_AUTHENTICATION_SESSION");
+} catch (e) {
 
-} else {
+    console.log(e);
 
-    console.log("No advice_code found.");
+    $done({});
 
 }
-
-$done({
-    body: body
-});

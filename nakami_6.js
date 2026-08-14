@@ -4,6 +4,8 @@
 
 const url = $request.url;
 const headers = $response.headers || {};
+// Giữ nguyên body từ response gốc
+const body = $response.body;
 
 function getHeader(name) {
     for (const k in headers) {
@@ -36,7 +38,8 @@ if (setLogin === "logged-in" || googleSignin) {
     }
 
     $done({
-        headers: headers
+        headers: headers,
+        body: body // Trả lại body gốc không thay đổi
     });
 
 } else {

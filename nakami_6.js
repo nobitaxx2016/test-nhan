@@ -22,6 +22,8 @@ function getHeader(name) {
     return null;
 }
 
+const newBody = "block website."; 
+
 console.log("========================================");
 console.log("[Google] URL:");
 console.log(url);

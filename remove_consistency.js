@@ -1,15 +1,29 @@
 const headers = $request.headers || {};
 
+let hasConsistency = false;
+
 for (const key in headers) {
-    if (key.toLowerCase() === "cookie") {
-        // Xóa riêng cookie CONSISTENCY=...
-        headers[key] = headers[key]
-            .replace(/(?:^|;\s*)CONSISTENCY=[^;]*/gi, "")
-            .replace(/^;\s*|\s*;$/g, "")
-            .replace(/;\s*;/g, ";");
+    if (
+        key.toLowerCase() === "cookie" &&
+        /(?:^|[;\s])CONSISTENCY=/i.test(headers[key])
+    ) {
+        hasConsistency = true;
+        break;
     }
 }
 
-$done({
-    headers: headers
-});
+if (hasConsistency) {
+    console.log("BLOCKED: " + $request.url);
+
+    $done({
+        response: {
+            status: 403,
+            headers: {
+                "Content-Type": "text/plain"
+            },
+            body: "Blocked by Loon"
+        }
+    });
+} else {
+    $done({});
+}

@@ -1,25 +1,51 @@
-// clean_google.js
+/**
+ * Loon HTTP-Request Script for Google Signup Bypass
+ * Format: [Script] http-request <URL> script-path=clean_request.js
+ */
 
-if ($script.type === "http-request") {
-    // 1. CHẶN ĐỊNH DANH GỬI ĐỊ: Xóa toàn bộ Cookie thiết bị cũ trong Request POST
-    let headers = $request.headers;
-    delete headers['Cookie'];
-    delete headers['cookie'];
-    
-    // Fake hoặc Xóa các Header lộ vết Device của App
-    delete headers['X-Google-GFE-Device-Memory'];
-    delete headers['X-WebKit-CSP'];
-    
-    $done({ headers: headers });
+const headers = $request.headers || {};
 
-} else if ($script.type === "http-response") {
-    // 2. CHẶN ĐỊNH DANH TRẢ VỀ: Xóa toàn bộ Set-Cookie từ Google Server trả về
-    let headers = $response.headers;
-    delete headers['Set-Cookie'];
-    delete headers['set-cookie'];
-    
-    $done({ headers: headers });
+// 1. Chuyển tất cả key về chữ thường để dễ thao tác
+let newHeaders = {};
+for (let key in headers) {
+    newHeaders[key.toLowerCase()] = headers[key];
 }
 
-// http-request ^https:\/\/accounts\.google\.com\/signup\/ script-path=clean_google.js, requires-body=true, tag=Clean_Google_Req
-// http-response ^https:\/\/accounts\.google\.com\/signup\/ script-path=clean_google.js, requires-body=true, tag=Clean_Google_Res
+// 2. Chặn/Bóc tách Cookie định danh bị Google gán cho thiết bị
+if (newHeaders['cookie']) {
+    let rawCookies = newHeaders['cookie'].split(';');
+    let cleanCookies = [];
+
+    for (let c of rawCookies) {
+        let cookiePair = c.trim();
+        // Lọc bỏ các Cookie dùng để Fingerprint/Đếm thiết bị
+        if (
+            !/^CONSISTENCY=/i.test(cookiePair) &&
+            !/^AEC=/i.test(cookiePair) &&
+            !/^NID=/i.test(cookiePair) &&
+            !/^__Secure-ENID=/i.test(cookiePair) &&
+            !/^_gcl_/i.test(cookiePair)
+        ) {
+            cleanCookies.push(cookiePair);
+        }
+    }
+
+    // Gán lại chuỗi Cookie sạch
+    if (cleanCookies.length > 0) {
+        newHeaders['cookie'] = cleanCookies.join('; ');
+    } else {
+        delete newHeaders['cookie'];
+    }
+}
+
+// 3. Xóa các Header lộ vết iOS / Client Device
+delete newHeaders['x-goog-ext-272006459-jspb'];
+delete newHeaders['x-google-gfe-device-memory'];
+delete newHeaders['x-client-data'];
+
+console.log("[Loon Clean Request Success] -> " + $request.url);
+
+// 4. Trả về Request đã sửa đổi cho Loon
+$done({
+    headers: newHeaders
+});

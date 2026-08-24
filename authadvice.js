@@ -46,6 +46,7 @@ if (!urlRegex.test(url)) {
 
             // Thay đổi
             body.device_id = newDeviceId;
+            body.safari_authentication_session = false;
 
             console.log("========== DEVICE ID ==========");
             console.log("Old: " + oldDeviceId);

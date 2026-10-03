@@ -51,9 +51,9 @@ n6IVsNP4dYPTrORpa9XCQuh179HypyIET6cuk57W14YvGBNgSjmnPwzRA5A1527g
 4TR1ZS7veK0peBAG/eNCHoG8ojtXVmpQqC3Gu8VDZ3xFcMPF9g==
 -----END CERTIFICATE-----`,
 
-    rebindLeft: 1,
+    rebindLeft: 0,
     expiredAt: 1792643783,
-    licenceCode: ""
+    licenceCode: "SKSC7S968FQX"
   },
 
   message: "ok"
